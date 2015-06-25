@@ -14,7 +14,6 @@ import ro.chronos.model.Employee;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import java.util.Map;
 
 /**
  * Jinq provider bean for querying.
@@ -34,13 +33,8 @@ public class JinqSource {
         streams = new JinqJPAStreamProvider(emf);
 
         // Configure Jinq to output the queries it executes
-        streams.setHint("queryLogger", new JPAQueryLogger() {
-            @Override
-            public void logQuery(String query, Map<Integer, Object> positionParameters,
-                                 Map<String, Object> namedParameters) {
-                LOGGER.info("  " + query);
-            }
-        });
+        streams.setHint("queryLogger", (JPAQueryLogger) (query, positionParameters, namedParameters) -> LOGGER.info("" +
+                "  " + query));
     }
 
     // Wrapper that passes through Jinq requests to Jinq

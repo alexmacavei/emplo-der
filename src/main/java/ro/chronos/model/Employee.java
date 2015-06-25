@@ -1,5 +1,7 @@
 package ro.chronos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Employee model from the H2 database.
@@ -35,6 +38,7 @@ public class Employee implements Serializable {
     private Long managerCode;
 
     @Column(name = "HIREDATE")
+    @JsonIgnore
     private LocalDate hireDate;
 
     @Column(name = "SAL")
@@ -89,6 +93,11 @@ public class Employee implements Serializable {
     public Employee setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
         return this;
+    }
+
+    @JsonProperty("hireDate")
+    public String getHireDateAsString() {
+        return hireDate.format(DateTimeFormatter.ISO_DATE);
     }
 
     public BigDecimal getSalary() {
